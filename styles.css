@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+
+body {
+    font-family: 'Kode Mono', 'Fira Code', 'Inconsolata', monospace;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #1a1a1d;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+#header {
+    margin-top: 50px;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+#choose-buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+    max-width: 300px; /* Adjust the max-width as needed */
+    margin: 0 auto;  /* Center the container */
+}
+
+#choose-buttons input[type='color'] {
+    width: 80px;
+    height: 80px;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+#choose-buttons input[type='color']::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+#choose-buttons input[type='color']::-webkit-color-swatch {
+    border: none;
+    border-radius: 50px;
+    box-shadow: rgba(255, 255, 255, 0.5) 0 0 5px;
+}
+
+#choose-buttons div{
+    font-size: 18px;
+    margin-top: -15px;
+}
+
+#canvas {
+    background-color: white;
+    width: 80vw;
+    height: 80vw;
+    max-width: 500px;
+    max-height: 500px;
+    min-width: 250px;
+    min-height: 250px;
+    color: #1a1a1d;
+    margin-right: 5vw;
+}
+
+#grid-change-container{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+#footer {
+    margin-top: 10px;
+    background-color: #e6870b;
+    font-size: 14px;
+    font-weight: 700;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+
+button {
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid white;
+    background: none;
+    color: white;
+    transition: transform 0.3s ease-in-out;
+}
+
+button:hover,
+.active {
+    background-color: aliceblue;
+    color: #1a1a1d;
+    border: 3px solid #ffa200;
+    font-weight: 700;
+    font-size: 16px;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    #main {
+        gap: 5px;
+        flex-direction: column;
+    }
+
+    #choose-buttons {
+        max-width: 100%;
+    }
+
+    #canvas {
+        width: 60vw;
+        height: 60vw;
+        margin: 10px auto;
+    }
+
+    button {
+        width: 70%;
+        height: 30px;
+        font-size: 12px;
+    }
+}

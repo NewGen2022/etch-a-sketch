@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js"></script>
+    <title>Etch-a-Sketch</title>
+</head>
+<body>
+    <div id="header">Etch-a-Sketch</div>
+
+    <div id="main">
+
+        <div id="choose-buttons">
+
+            <input type="color" id="color-picker" title="Pick a color" />
+
+            <button id="color-mode" class="active">Color mode</button>
+            <button id="rainbow-mode">Rainbow mode</button>
+            <button id="eraser">Eraser</button>
+            <button id="clear">Clear</button>
+
+            <div id='grid-change-container'>
+                <input id="grid-change" type="range" value="16" min="1" max="64"/>
+                <label for="grid-change">16x16</label>
+            </div>
+
+            <div id="show-grid-container">
+                <input id="show-grid" type="checkbox" />
+                <label for="show-grid">Show Grid</label>
+            </div>
+
+        </div>
+
+        <div id="canvas">
+            Canvas
+        </div>
+
+    </div>
+    
+    <div id="footer">Copyright © 2024 NewGen2022</div>
+
+</body>
+</html>
