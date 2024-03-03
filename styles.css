@@ -38,8 +38,8 @@ body {
     justify-content: center;
     text-align: center;
     gap: 20px;
-    max-width: 300px; /* Adjust the max-width as needed */
-    margin: 0 auto;  /* Center the container */
+    max-width: 300px;
+    margin: 0 auto;
 }
 
 #choose-buttons input[type='color'] {
@@ -76,6 +76,16 @@ body {
     min-height: 250px;
     color: #1a1a1d;
     margin-right: 5vw;
+    display: grid;
+}
+
+.grid-element {
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.grid-element:hover {
+    background-color: #000;
 }
 
 #grid-change-container{
@@ -120,13 +130,24 @@ button:hover,
 }
 
 @media (max-width: 768px) {
+    #header {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: 36px;
+        font-weight: 700;
+    }
+
     #main {
-        gap: 5px;
+        gap: 10px;
         flex-direction: column;
     }
 
-    #choose-buttons {
-        max-width: 100%;
+    #choose-buttons{
+        max-width:40%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        gap: 10px;
     }
 
     #canvas {
@@ -138,6 +159,11 @@ button:hover,
     button {
         width: 70%;
         height: 30px;
-        font-size: 12px;
+        font-size: 10px;
+    }
+
+    button:hover,
+    .active {
+        font-size: 10px;
     }
 }
