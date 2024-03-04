@@ -1,55 +1,57 @@
-const DEFAULT_COLOR = '#000'
-const isClearButtonActive = false
+const DEFAULT_COLOR = '#000';
+let isMouseDown = false;
+let currentColor = DEFAULT_COLOR;
+let eraserPressed = false;
+let currentSize = 16;
+let rainbowModePressed = false;
+
+// Cache frequently used DOM elements
+const buttons = document.querySelectorAll('#choose-buttons button');
 const eraserButton = document.getElementById('eraser');
 const colorModeButton = document.getElementById('color-mode');
-const DEFAULT_SIZE = 16;
-const gridChangeSlider = document.getElementById('grid-change');
 const canvas = document.getElementById('canvas');
-const showGrid = document.getElementById('show-grid')
-const colorPicker = document.getElementById('color-picker')
-const clear = document.getElementById('clear')
-const rainbowModeColorButton = document.getElementById('rainbow-mode')
-const buttons = document.querySelectorAll('#choose-buttons button');
+const showGrid = document.getElementById('show-grid');
+const colorPicker = document.getElementById('color-picker');
+const clear = document.getElementById('clear');
+const rainbowModeColorButton = document.getElementById('rainbow-mode');
+const gridChangeSlider = document.getElementById('grid-change');
+const gridChangeLabel = document.querySelector('label[for="grid-change"]');
 
-let isMouseDown = false
-let currentColor = DEFAULT_COLOR
-let eraserPressed = false;
-let currentSize = DEFAULT_SIZE;
-let rainbowModePressed = false
-
-// gives clicked button "active" styles button
-buttons.forEach(function(button) {
-    button.addEventListener('click', function() {
-        buttons.forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-
+// Event listeners for button clicks
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
     });
 });
 
-// Grid calculating and displaying
-gridChangeSlider.addEventListener('input', (e) => changeSize(Number(e.target.value))); // Convert the value to a number
+// Event listener for changing grid size
+gridChangeSlider.addEventListener('input', (e) => changeSize(Number(e.target.value)));
 
+// Function to change the size of the grid
 function changeSize(value) {
-    currentSize = value
-    updateSizeLabel(value)
-    reloadGrid()
+    currentSize = value;
+    updateSizeLabel(value);
+    reloadGrid();
 }
 
+// Function to update the grid size label
 function updateSizeLabel(value) {
-    document.querySelector('label[for="grid-change"]').textContent = `${value}x${value}`;
+    gridChangeLabel.textContent = `${value}x${value}`;
 }
 
+// Function to reload the grid
 function reloadGrid() {
     clearGrid();
     setupGrid(currentSize);
 }
 
+// Function to clear the grid
 function clearGrid() {
     canvas.innerHTML = '';
 }
 
+// Function to set up the grid with the specified size
 function setupGrid(size) {
     canvas.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     canvas.style.gridTemplateRows = `repeat(${size}, 1fr)`;
@@ -63,103 +65,68 @@ function setupGrid(size) {
     updateGridBorders();
 }
 
+// Function to update grid borders based on checkbox status
 function updateGridBorders() {
     const showGridCheckbox = document.getElementById('show-grid');
     const gridElements = document.querySelectorAll('.grid-element');
 
-    if (showGridCheckbox.checked) {
-        gridElements.forEach((gridElement) => {
-            gridElement.style.border = '1px solid black';
-        });
-        console.log('Show grid');
-    } else {
-        gridElements.forEach((gridElement) => {
-            gridElement.style.border = 'none';
-        });
-        console.log('Hide grid');
-    }
+    const borderStyle = showGridCheckbox.checked ? '1px solid black' : 'none';
+
+    gridElements.forEach(gridElement => gridElement.style.border = borderStyle);
+    console.log(`Grid is ${showGridCheckbox.checked ? 'shown' : 'hidden'}`);
 }
 
+// Event listener for window load
 window.onload = () => {
-    updateSizeLabel(DEFAULT_SIZE);
-    setupGrid(DEFAULT_SIZE);
+    updateSizeLabel(currentSize);
+    setupGrid(currentSize);
+};
+
+// Event listener for showing/hiding the grid
+showGrid.addEventListener('change', updateGridBorders);
+
+// Function to set drawing mode
+function setDrawingMode(isEraser, isRainbowMode, color) {
+    eraserPressed = isEraser;
+    rainbowModePressed = isRainbowMode;
+    currentColor = color;
 }
 
-// Show grid
+// Event listener for eraser button click
+eraserButton.addEventListener('click', () => setDrawingMode(true, false, '#fff'));
+// Event listener for color mode button click
+colorModeButton.addEventListener('click', () => setDrawingMode(false, false, colorPicker.value));
 
-showGrid.addEventListener('change', updateGridBorders)
-
-// Make color stay on canvas
-
-
-eraserButton.addEventListener('click', () => {
-    eraserPressed = true
-    rainbowModePressed = false
-    currentColor = '#fff'
-});
-
-colorModeButton.addEventListener('click', () => {
-    eraserPressed = false
-    rainbowModePressed = false
-    currentColor = colorPicker.value
-});
-
-canvas.addEventListener('mousemove', (e) => {
-    if (isMouseDown){
-        draw(e, currentColor)
-    }
-})
-
-canvas.addEventListener('mouseleave', () => {
-    isMouseDown = false;
-});
-
+// Event listeners for mouse events on the canvas
+canvas.addEventListener('mousemove', (e) => draw(e));
+canvas.addEventListener('mouseleave', () => isMouseDown = false);
 canvas.addEventListener('mousedown', (e) => {
-    isMouseDown = true
-    draw(e, currentColor)
-})
+    isMouseDown = true;
+    draw(e);
+});
+canvas.addEventListener('mouseup', () => isMouseDown = false);
 
-canvas.addEventListener('mouseup', () => {
-    isMouseDown = false
-})
-
-function draw(e, color){
-    if (e.target.classList.contains('grid-element')) {
-        if (rainbowModePressed) {
-            color = getRandomHexColor();
-        }
-        e.target.style.backgroundColor = color
+// Function to handle drawing on the canvas
+function draw(e) {
+    if (isMouseDown && e.target.classList.contains('grid-element')) {
+        currentColor = rainbowModePressed ? getRandomHexColor() : currentColor;
+        e.target.style.backgroundColor = currentColor;
     }
 }
 
-// Change color
-colorPicker.addEventListener('input', (e) => currentColor = e.target.value)
+// Event listener for color picker input
+colorPicker.addEventListener('input', (e) => currentColor = e.target.value);
 
-// Clear canvas
-clear.addEventListener('click', function(){
-    const gridElements = document.querySelectorAll('.grid-element')
-    
-    gridElements.forEach((gridElement) => {
-        gridElement.style.backgroundColor = '#fff'
-    })
+// Event listener for clear button click
+clear.addEventListener('click', () => {
+    document.querySelectorAll('.grid-element').forEach(gridElement => gridElement.style.backgroundColor = '#fff');
+    clear.classList.remove('active');
+});
 
-    clear.classList.remove('active')
-})
+// Event listener for rainbow mode button click
+rainbowModeColorButton.addEventListener('click', () => setDrawingMode(false, true, getRandomHexColor()));
 
-// Randow color
-rainbowModeColorButton.addEventListener('click', () => {
-    rainbowModePressed = true
-    currentColor = getRandomHexColor()
-})
-
+// Function to get a random hex color
 function getRandomHexColor() {
-    const randomRed = Math.floor(Math.random() * 256);
-    const randomGreen = Math.floor(Math.random() * 256);
-    const randomBlue = Math.floor(Math.random() * 256);
-
-    const hexRed = randomRed.toString(16).padStart(2, '0');
-    const hexGreen = randomGreen.toString(16).padStart(2, '0');
-    const hexBlue = randomBlue.toString(16).padStart(2, '0');
-
-    return `#${hexRed}${hexGreen}${hexBlue}`;
+    return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
 }
